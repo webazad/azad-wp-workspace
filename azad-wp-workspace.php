@@ -43,7 +43,9 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
                 
             add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
             add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
+            add_action( 'admin_init', array( $this, 'show_admin_bar_front' ) );
             add_action( 'admin_init', array( $this, 'wp_permalink' ) );
+
             // add_action( 'admin_init', array( $this, 'load_script_css' ) );
 
             // notice perposes
@@ -112,12 +114,18 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
                 'dashboard_quick_press',
                 'dashboard_primary',
                 'dashboard_site_health'
-              );
-            update_user_meta( get_current_user_id(), 'show_welcome_panel', false );
+            );
+
             update_user_meta( get_current_user_id(), 'metaboxhidden_dashboard', $to_hide );
 
         }
 
+        public function show_admin_bar_front(){
+            
+            update_user_meta( get_current_user_id(), 'show_welcome_panel', false );
+            update_user_meta( get_current_user_id(), 'show_admin_bar_front', false );
+
+        }
         
         public function wp_permalink(){
             
@@ -179,26 +187,43 @@ function aws_doing_ajax(){
 register_uninstall_hook( __FILE__, 'aws_uninstall' );
 
 function aws_uninstall() {
+
     global $wpdb;
+
     if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+
         $curr_blog = $wpdb->blogid;
+
         $blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+
         foreach ( $blogids as $blog_id ) {
-            switch_to_blog( $blog_id );
+
+            switch_to_blog( $blog_id );            
             aws_uninstall_db();
+
         }
+
         switch_to_blog( $curr_blog );
+
     } else {
+
         aws_uninstall_db();
+
     }
+
 }
 
 function aws_uninstall_db() {
+
     global $wpdb;
+
     $result = $wpdb->query( "DESCRIBE $wpdb->terms `term_order`" );
+
     if ( $result ) {
         $query = "ALTER TABLE $wpdb->terms DROP `term_order`";
         $result = $wpdb->query( $query );
     }
+
     delete_option( 'aws_install' );
+
 }
