@@ -1,9 +1,6 @@
 <?php
 $aco_options = get_option( 'aco_options' );
 $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : array();
-$aco_tags = isset( $aco_options['tags'] ) ? $aco_options['tags'] : array();
-
-$advanced_view = isset( $aco_options['show_advanced_view']) ? $aco_options['show_advanced_view'] : '';
 ?>
 <style>
 .aco-toggle {
@@ -185,109 +182,12 @@ $advanced_view = isset( $aco_options['show_advanced_view']) ? $aco_options['show
                 </tbody>
             </table>
         </div>
-
-        <div id="aco_select_tags">
-            <table class="form-table">
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row"><?php _e( 'Check to Sort Taxonomies', AWW_TEXTDOMAIN ) ?></th>
-                        <td>
-                            <label>
-                                <div class="aco-toggle">
-                                    <input id="aco_selectall_tags" class="aco-toggle__input" type="checkbox">
-                                    <div class="aco-toggle__items">
-                                        <span class="aco-toggle__track"></span>
-                                        <span class="aco-toggle__thumb"></span>
-                                        <svg class="aco-toggle__off" width="6" height="6" aria-hidden="true"
-                                             role="img" focusable="false" viewBox="0 0 6 6">
-                                            <path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path>
-                                        </svg>
-                                        <svg class="aco-toggle__on" width="2" height="6" aria-hidden="true"
-                                             role="img" focusable="false" viewBox="0 0 2 6">
-                                            <path d="M0 0h2v6H0z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                &nbsp;<?php _e( 'Select All', AWW_TEXTDOMAIN ) ?></label><br>
-                            <?php
-                            $taxonomies = get_taxonomies( array( 'show_ui' => true ), 'objects' );
-
-                            foreach ( $taxonomies as $taxonomy ) {
-                                if ( $taxonomy->name == 'post_format' )
-                                    continue;
-                                ?>
-                                <label>
-                                    <div class="aco-toggle">
-                                        <input class="aco-toggle__input" type="checkbox"
-                                               name="tags[]" value="<?php echo $taxonomy->name; ?>" <?php
-                                        if ( isset( $aco_tags ) && is_array( $aco_tags ) ) {
-	                                        if ( in_array( $taxonomy->name, $aco_tags ) ) {
-		                                        echo 'checked="checked"';
-	                                        }
-                                        }
-                                        ?>>
-                                        <div class="aco-toggle__items">
-                                            <span class="aco-toggle__track"></span>
-                                            <span class="aco-toggle__thumb"></span>
-                                            <svg class="aco-toggle__off" width="6" height="6" aria-hidden="true"
-                                                 role="img" focusable="false" viewBox="0 0 6 6">
-                                                <path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path>
-                                            </svg>
-                                            <svg class="aco-toggle__on" width="2" height="6" aria-hidden="true"
-                                                 role="img" focusable="false" viewBox="0 0 2 6">
-                                                <path d="M0 0h2v6H0z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                   &nbsp;<?php echo $taxonomy->label ?></label><br>
-                                    <?php
-                                }
-                                ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="scporder_advanved_view">
-            <table class="form-table">
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row"><?php _e( 'Check to see advanced view of Post Types ', AWW_TEXTDOMAIN ) ?></th>
-                        <td>
-                            <label>
-                                <div class="aco-toggle">
-                                    <input class="aco-toggle__input" type="checkbox"
-                                        name="show_advanced_view" value="1" <?php checked( '1', $advanced_view, 'checked="checked"' );  ?>>
-                                    <div class="aco-toggle__items">
-                                        <span class="aco-toggle__track"></span>
-                                        <span class="aco-toggle__thumb"></span>
-                                        <svg class="aco-toggle__off" width="6" height="6" aria-hidden="true"
-                                            role="img" focusable="false" viewBox="0 0 6 6">
-                                            <path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path>
-                                        </svg>
-                                        <svg class="aco-toggle__on" width="2" height="6" aria-hidden="true"
-                                            role="img" focusable="false" viewBox="0 0 2 6">
-                                            <path d="M0 0h2v6H0z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <?php echo __( 'Show advanced view of Post Types', AWW_TEXTDOMAIN ); ?>
-                            </label><br>
-                            <p class="description"><?php _e( 'Notice: This is for advanced users only.', AWW_TEXTDOMAIN ); ?></p>
-                            <!--@todo : please look into below description. -->
-                            <p class="description"><?php _e( 'Check to include other custom post types. You will need to update your settings after enabling this option.', AWW_TEXTDOMAIN ); ?></p>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        
         <p class="submit">
             <input type="submit" class="button-primary" name="aco_submit" value="<?php _e( 'Update',  AWW_TEXTDOMAIN ); ?>">
         </p>
-
     </form>
+
     <div class="scpo-reset-order">
         <h1>Want to reset the order of the posts?</h1>
         <div id="scpo_reset_select_objects">
@@ -344,14 +244,6 @@ $advanced_view = isset( $aco_options['show_advanced_view']) ? $aco_options['show
                 $( items ).prop( 'checked', true );
             else
                 $( items ).prop( 'checked', false );
-        });
-
-        $( "#aco_selectall_tags" ).on( 'click', function () {
-            var items = $( "#aco_select_tags input" );
-            if ( $( this ).is( ':checked' ) )
-                $( items ).prop( 'checked', true );
-            else
-                $(items).prop('checked', false);
         });
 
         // Reset order function
