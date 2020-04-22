@@ -35,19 +35,28 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
 
         public function __construct(){
 
-            //add_filter( 'show_admin_bar', '__return_false' );
-
+            
             add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
             add_action( 'plugins_loaded', array( $this, 'i18n' ), 2 );
-
+            
             if ( ! get_option( 'aws_install' ) )
-                $this->aws_install();
-                
+            $this->aws_install();
+            
             add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+
+            // to hide dashboard metaboxes
             add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
+
+            // to hide welcome panel
             add_action( 'admin_init', array( $this, 'hide_welcome_panel' ) );
-            add_action( 'admin_init', array( $this, 'hide_admin_bar_front' ) );
-            add_action( 'after_setup_theme', array( $this, 'remove_admin_bar_front' ) );
+
+            // to hide admin bar
+            add_filter( 'show_admin_bar', '__return_false' );
+            // Some other ways to hide
+            // add_action( 'admin_init', array( $this, 'hide_admin_bar_front' ) );
+            // add_action( 'after_setup_theme', array( $this, 'remove_admin_bar_front' ) );
+
+            // to set the permalink
             add_action( 'admin_init', array( $this, 'wp_permalink' ) );
 
             // add_action( 'admin_init', array( $this, 'load_script_css' ) );
@@ -132,14 +141,14 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
 
         public function hide_admin_bar_front(){
             
-            //update_user_meta( get_current_user_id(), 'show_admin_bar_front', false );
+            update_user_meta( get_current_user_id(), 'show_admin_bar_front', false );
 
         }
 
         public function remove_admin_bar_front(){
             
             if ( ! current_user_can( 'administrator' ) && ! is_admin() ) {
-                //show_admin_bar(false);
+                show_admin_bar(false);
             }
 
         }
