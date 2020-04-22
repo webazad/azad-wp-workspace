@@ -7,7 +7,7 @@
   Author URI: gittechs.com/author
 Author Email: webdevazad@gmail.com
      Version: 1.0.0
-     License: GPL2 or later
+     License: GPLv2 or later
  License URI: http: //www.gnu.org/licenses/gpl-2.0.html
  Text Domain: azad-wp-workspace
  Domain Path: /languages
@@ -43,7 +43,8 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
                 
             add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
             add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
-            add_action( 'admin_init', array( $this, 'show_admin_bar_front' ) );
+            add_action( 'admin_init', array( $this, 'hide_welcome_panel' ) );
+            add_action( 'admin_init', array( $this, 'hide_admin_bar_front' ) );
             add_action( 'admin_init', array( $this, 'wp_permalink' ) );
 
             // add_action( 'admin_init', array( $this, 'load_script_css' ) );
@@ -120,9 +121,14 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
 
         }
 
-        public function show_admin_bar_front(){
+        public function hide_welcome_panel(){
             
             update_user_meta( get_current_user_id(), 'show_welcome_panel', false );
+
+        }
+
+        public function hide_admin_bar_front(){
+            
             update_user_meta( get_current_user_id(), 'show_admin_bar_front', false );
 
         }
@@ -160,9 +166,7 @@ if( ! function_exists( 'load_azad_wp_workspace' ) ){
     }
 }
 
-if( is_admin() ){
-    $GLOBALS['load_azad_wp_workspace'] = load_azad_wp_workspace();
-}
+$GLOBALS['load_azad_wp_workspace'] = load_azad_wp_workspace();
 
 require_once( AWW_PATH . 'class-wp-workspace.php' );
 register_activation_hook( __FILE__, array( 'AWS_Activator', 'activate_plugin' ) );
