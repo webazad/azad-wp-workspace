@@ -119,7 +119,7 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
             <table class="form-table">
                 <tbody>
                     <tr valign="top">
-                        <th scope="row"><?php _e( 'Check to Sort Post Types', AWW_TEXTDOMAIN ) ?></th>
+                        <th scope="row"><?php _e( 'Disable admin bar for Role', AWW_TEXTDOMAIN ) ?></th>
                         <td>
                             <label>
                                 <div class="aco-toggle">
@@ -139,16 +139,16 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
                                 </div>
                                 &nbsp;<?php _e( 'Select All', AWW_TEXTDOMAIN ) ?></label><br>
                             <?php
-                            $post_types_args = apply_filters( 'aco_post_types_args', array(
-                                'show_ui'      => true,
-                                'show_in_menu' => true,
-                            ), $aco_options );
+                            
+                            global $wp_roles;
 
-                            $post_types = get_post_types( $post_types_args, 'objects' );
+                            if ( ! isset( $wp_roles ) ) {
+                                $wp_roles = new WP_Roles();
+                            }
 
-                            foreach ( $post_types as $post_type ) {
-                                if ( $post_type->name == 'attachment' )
-                                    continue;
+                            $roles = $wp_roles->get_names();
+
+                            foreach ( $roles as $role => $name ) {
                                 ?>
                                 <label>
                                     <div class="aco-toggle">
@@ -173,7 +173,7 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
                                             </svg>
                                         </div>
                                     </div>
-                                    &nbsp;<?php echo $post_type->label; ?></label><br>
+                                    &nbsp;<?php echo esc_html( $name ); ?></label><br>
                                     <?php
                                 }
                                 ?>
@@ -187,52 +187,6 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
             <input type="submit" class="button-primary" name="aco_submit" value="<?php _e( 'Update',  AWW_TEXTDOMAIN ); ?>">
         </p>
     </form>
-
-    <div class="scpo-reset-order">
-        <h1>Want to reset the order of the posts?</h1>
-        <div id="scpo_reset_select_objects">
-            <table class="form-table">
-                <tbody>
-                <tr valign="top">
-                    <th scope="row"><?php _e( 'Check to reset order of Post Types',  AWW_TEXTDOMAIN ) ?></th>
-                    <td>
-                        <?php
-                        foreach ( $post_types as $post_type ) {
-                            if ( $post_type->name == 'attachment' )
-                                continue;
-                            ?>
-                            <label>
-                                <div class="aco-toggle">
-                                    <input class="aco-toggle__input" type="checkbox"
-                                           name="<?php echo $post_type->name; ?>" value="">
-                                    <div class="aco-toggle__items">
-                                        <span class="aco-toggle__track"></span>
-                                        <span class="aco-toggle__thumb"></span>
-                                        <svg class="aco-toggle__off" width="6" height="6" aria-hidden="true"
-                                             role="img" focusable="false" viewBox="0 0 6 6">
-                                            <path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path>
-                                        </svg>
-                                        <svg class="aco-toggle__on" width="2" height="6" aria-hidden="true"
-                                             role="img" focusable="false" viewBox="0 0 2 6">
-                                            <path d="M0 0h2v6H0z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                &nbsp;<?php echo $post_type->label; ?></label><br>
-                            <?php
-                        }
-                        ?>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-        <div>
-            <a id="reset-scp-order" class="button button-primary" href="#">Reset order</a>
-            <span class="scpo-reset-response"></span>
-        </div>
-    </div>
 </div>
 
 <script>
