@@ -1,6 +1,6 @@
 <?php
-$aco_options = get_option( 'aco_options' );
-$aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : array();
+$aww_options = get_option( 'aww_options' );
+$aww_roles = isset( $aww_options['roles'] ) ? $aww_options['roles'] : array();
 ?>
 <style>
 .aco-toggle {
@@ -102,6 +102,7 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
 <div class="wrap">
     <div id="icon-tools" class="icon32"><br/></div>
     <h1><?php esc_html_e( get_admin_page_title(), AWW_TEXTDOMAIN ); ?></h1>
+    <p><span style="font-weight:bold;"><?php esc_html_e( 'This plugin disables the Admin Bar from the frontend only, it does not affect the dashboard', AWW_TEXTDOMAIN ); ?></span></p>
     <?php if ( isset( $_GET['msg'] ) ) : ?>
         <div id="message" class="updated below-h2">
             <?php if ( $_GET['msg'] == 'update' ) : ?>
@@ -112,7 +113,7 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
 
     <form method="post">
 
-        <?php if ( function_exists( 'wp_nonce_field' ) ) wp_nonce_field( 'aco_nonce' ); ?>
+        <?php if ( function_exists( 'wp_nonce_field' ) ) wp_nonce_field( 'aww_nonce' ); ?>
 
         <div id="aco_select_objects">
 
@@ -153,11 +154,13 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
                                 <label>
                                     <div class="aco-toggle">
                                         <input class="aco-toggle__input" type="checkbox"
-                                               name="objects[]" value="<?php echo $post_type->name; ?>" <?php
-                                        if ( isset( $aco_objects ) && is_array( $aco_objects ) ) {
-	                                        if ( in_array( $post_type->name, $aco_objects ) ) {
+                                               name="roles[]" value="<?php echo $role; ?>" <?php
+                                        if ( isset( $aww_roles ) && is_array( $aww_roles ) ) {
+
+	                                        if ( in_array( $role, $aww_roles ) ) {
 		                                        echo 'checked="checked"';
-	                                        }
+                                            }
+                                            
                                         }
 		                                ?>>
                                         <div class="aco-toggle__items">
@@ -184,12 +187,13 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
         </div>
         
         <p class="submit">
-            <input type="submit" class="button-primary" name="aco_submit" value="<?php _e( 'Update',  AWW_TEXTDOMAIN ); ?>">
+            <input type="submit" class="button-primary" name="aww_submit" value="<?php _e( 'Update',  AWW_TEXTDOMAIN ); ?>">
         </p>
     </form>
 </div>
 
 <script>
+
     (function ($) {
 
         $( "#aco_selectall_objects" ).on( 'click', function () {
@@ -200,32 +204,6 @@ $aco_objects = isset( $aco_options['objects'] ) ? $aco_options['objects'] : arra
                 $( items ).prop( 'checked', false );
         });
 
-        // Reset order function
-        $( '#reset-scp-order' ).click(function ( e ) {
-
-            e.preventDefault();
-            var btn = $(this),
-                item_input = $(this).parents( '.scpo-reset-order' ).find( 'input:checked' ),
-                items = [],
-                data = {
-                    action: 'scpo_reset_order',
-                    scpo_security: '<?php echo wp_create_nonce( "scpo-reset-order" ); ?>'
-                };
-
-            if ( item_input.length > 0 ) {
-                item_input.each(function ( i, item ) {
-                    items.push( item.name );
-                });
-
-                data['items'] = items;
-
-                $.post("<?php echo admin_url( 'admin-ajax.php' );  ?>", data, function ( response ) {
-                    if (response) {
-                        btn.next( '.scpo-reset-response' ).text( response );
-                    }
-                });
-            }
-        });
-
     })(jQuery)
+
 </script>

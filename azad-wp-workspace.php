@@ -47,11 +47,14 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
             // to hide dashboard metaboxes
             add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
 
+            // to update options
+            add_action( 'admin_init', array( $this, 'aww_update_options' ) );
+
             // to hide welcome panel
             add_action( 'admin_init', array( $this, 'hide_welcome_panel' ) );
-
+            
             // to hide admin bar
-            add_filter( 'show_admin_bar', '__return_false' );
+            add_action( 'init', array( $this, 'init_front' ) );
             // Some other ways to hide
             // add_action( 'admin_init', array( $this, 'hide_admin_bar_front' ) );
             // add_action( 'after_setup_theme', array( $this, 'remove_admin_bar_front' ) );
@@ -68,10 +71,88 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
             // reset ajax action
             // add_action( 'wp_ajax_aco_reset_order', array( $this, 'aco_ajax_reset_order' ) );
             
-        }        
+        }
+
+        public function aww_update_options() {
+    
+            if ( ! isset( $_POST['aww_submit'] ) )
+                return false;
+    
+            check_admin_referer( 'aww_nonce' );
+    
+            $input_options = array();
+            $input_options['roles'] = isset( $_POST['roles'] ) ? $_POST['roles'] : '';
+    
+            update_option( 'aww_options', $input_options );
+    
+            //wp_redirect( "admin.php?page=" . $this->slug . "&msg=update" );
+
+        }
+
+        public function get_settings() {
+
+            $settings = get_option( 'aww_options' );
+            return $settings;
+
+        }
+
+        public function init_front() {
+
+            $settings = $this->get_settings();
+
+            $aww_roles = $settings['roles'];
+            $user      = new WP_User( get_current_user_id() );
+            
+            if( ! empty( $aww_roles ) ){
+
+                if ( ! is_array( $aww_roles ) ) {
+                    $aww_roles = array( $aww_roles );
+                }
+                
+                foreach( $aww_roles as $role ){
+                    if ( in_array( $role, $user->roles, true ) ) {
+                        return $this->disable();
+                    }
+                }
+                
+            }
+
+            return false;
+
+        }
+
+        public function disable() {
+
+            if( is_admin() ){
+                // WP 3.x support
+                remove_action( 'personal_options', '_admin_bar_preferences' );
+
+                // Disable option on user edit screen
+                add_action( 'admin_print_styles-user-edit.php', array( $this, 'disable_personal_option' ) );
+
+                // Disable option on profile screen
+                add_action( 'admin_print_styles-profile.php', array( $this, 'disable_personal_option' ) );
+            }else{
+                add_filter( 'show_admin_bar', '__return_false' );
+            }
+
+        }
+
+        /**
+         * Disable personal option row for Admin Bar preferences via inline CSS
+         */
+        public function disable_personal_option() {
+
+            echo '<style type="text/css">
+                    .show-admin-bar {
+                        display: none;
+                    }
+                </style>';
+
+        }
 
         /* Add the plugin settings link */
-        function plugin_settings_link( $actions, $file ) {
+        public function plugin_settings_link( $actions, $file ) {
 
             if ( $file != AWW_BASENAME ) {
                 return $actions;
