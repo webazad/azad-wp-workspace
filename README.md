@@ -1,1 +1,2 @@
-# azad-wp-workspace
+# Azad WP Workspace
+AzadIt is my personal plugin that i install to hide all dashboard metaboxes and to remove the admin bar from the front end just after the installation of this plugin and i can controll the admin bar who can see this and who not.

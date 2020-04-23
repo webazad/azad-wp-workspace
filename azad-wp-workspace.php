@@ -172,8 +172,8 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
 
             if( current_user_can( 'activate_plugins' ) && function_exists( 'add_options_page' ) ){
                 $hook = add_options_page(
-                    esc_html__( 'Azad Workshop', AWW_TEXTDOMAIN ),
-                    esc_html__( 'Azad Workshop', AWW_TEXTDOMAIN ),
+                    esc_html__( 'Azad Workspace', AWW_TEXTDOMAIN ),
+                    esc_html__( 'Azad Workspace', AWW_TEXTDOMAIN ),
                     'activate_plugins',
                     $this->slug,
                     array( $this, 'admin_settings_page' )
