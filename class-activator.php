@@ -2,14 +2,16 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-if( ! class_exists('AWS_Activator')){
+if( ! class_exists( 'Activator') ) {
 
-    class AWS_Activator{
+    class Activator{
 
         public static $_instance = null;
 
         public function __construct(){
-            add_action( 'admin_init', array( 'AWS_Activator', 'aws_safe_welcome_redirect' ) );
+
+            add_action( 'admin_init', array( 'Activator', 'aws_safe_welcome_redirect' ) );
+
         }
 
         public function aws_safe_welcome_redirect(){
@@ -30,7 +32,7 @@ if( ! class_exists('AWS_Activator')){
 
         }
 
-        public static function activate_plugin() {
+        public static function activate() {
 
             set_transient( 'welcome_redirect_aws', true, 60 );
 			
@@ -40,6 +42,13 @@ if( ! class_exists('AWS_Activator')){
                 update_option( AWW_TEXTDOMAIN, time() );
             }
             
+            delete_option( 'widget_meta' );
+            delete_option( 'widget_archives' );
+            delete_option( 'widget_categories' );
+            delete_option( 'widget_recent-comments' );
+            delete_option( 'widget_recent-posts' );
+            delete_option( 'widget_search' );
+
         }
 
         public static function _get_instance(){
@@ -56,7 +65,7 @@ if( ! class_exists('AWS_Activator')){
 
 if( ! function_exists( 'load_aws_activator' )){
     function load_aws_activator(){
-        return AWS_Activator::_get_instance();
+        return Activator::_get_instance();
     }
 }
 $GLOBALS['load_aws_activator'] = load_aws_activator();

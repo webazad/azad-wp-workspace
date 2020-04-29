@@ -172,8 +172,8 @@ if( ! class_exists( 'Azad_Workshop' ) ) {
 
             if( current_user_can( 'activate_plugins' ) && function_exists( 'add_options_page' ) ){
                 $hook = add_options_page(
-                    esc_html__( 'Azad Workspace', AWW_TEXTDOMAIN ),
-                    esc_html__( 'Azad Workspace', AWW_TEXTDOMAIN ),
+                    esc_html__( 'Azad Workshop', AWW_TEXTDOMAIN ),
+                    esc_html__( 'Azad Workshop', AWW_TEXTDOMAIN ),
                     'activate_plugins',
                     $this->slug,
                     array( $this, 'admin_settings_page' )
@@ -269,8 +269,8 @@ if( ! function_exists( 'load_azad_wp_workspace' ) ){
 
 $GLOBALS['load_azad_wp_workspace'] = load_azad_wp_workspace();
 
-require_once( AWW_PATH . 'class-wp-workspace.php' );
-register_activation_hook( __FILE__, array( 'AWS_Activator', 'activate_plugin' ) );
+require_once( AWW_PATH . 'class-activator.php' );
+register_activation_hook( __FILE__, array( 'Activator', 'activate' ) );
 
 function aws_doing_ajax(){
 
