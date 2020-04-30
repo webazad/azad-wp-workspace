@@ -10,7 +10,7 @@ if( ! class_exists( 'Activator') ) {
 
         public function __construct(){
 
-            add_action( 'admin_init', array( 'Activator', 'aws_safe_welcome_redirect' ) );
+            add_action( 'admin_init', array( $this, 'aws_safe_welcome_redirect' ) );
 
         }
 
