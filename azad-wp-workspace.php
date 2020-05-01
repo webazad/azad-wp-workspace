@@ -269,8 +269,8 @@ if( ! function_exists( 'load_azad_wp_workspace' ) ){
 
 $GLOBALS['load_azad_wp_workspace'] = load_azad_wp_workspace();
 
-require_once( AWW_PATH . 'class-aws-activator.php' );
-register_activation_hook( __FILE__, array( 'Activator', 'activate_aws' ) );
+require_once( AWW_PATH . 'class-aww-activator.php' );
+register_activation_hook( __FILE__, array( 'AWW_Activator', 'activate_aww' ) );
 
 function aws_doing_ajax(){
 

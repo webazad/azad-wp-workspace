@@ -2,24 +2,24 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-if( ! class_exists( 'AWS_Activator') ) {
+if( ! class_exists( 'AWW_Activator') ) {
 
-    class AWS_Activator{
+    class AWW_Activator{
 
         public static $_instance = null;
 
         public function __construct(){
 
-            add_action( 'admin_init', array( $this, 'aws_safe_welcome_redirect' ) );
+            add_action( 'admin_init', array( $this, 'aww_safe_welcome_redirect' ) );
 
         }
 
-        public function aws_safe_welcome_redirect(){
+        public function aww_safe_welcome_redirect(){
 
-			if ( ! get_transient( 'welcome_redirect_aws' ) ) {
+			if ( ! get_transient( 'welcome_redirect_aww' ) ) {
                 return;
             }
-            delete_transient( 'welcome_redirect_aws' );
+            delete_transient( 'welcome_redirect_aww' );
             if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
                 return;
             }
@@ -32,9 +32,9 @@ if( ! class_exists( 'AWS_Activator') ) {
 
         }
 
-        public static function activate_aws() {
+        public static function activate_aww() {
 
-            set_transient( 'welcome_redirect_aws', true, 60 );
+            set_transient( 'welcome_redirect_aww', true, 60 );
 			
             $aws_textdomain = get_option( AWW_TEXTDOMAIN );
             
@@ -63,9 +63,9 @@ if( ! class_exists( 'AWS_Activator') ) {
     }
 }
 
-if( ! function_exists( 'load_aws_activator' )){
-    function load_aws_activator(){
-        return AWS_Activator::_get_instance();
+if( ! function_exists( 'load_aww_activator' )){
+    function load_aww_activator(){
+        return AWW_Activator::_get_instance();
     }
 }
-$GLOBALS['load_aws_activator'] = load_aws_activator();
+$GLOBALS['load_aww_activator'] = load_aww_activator();
