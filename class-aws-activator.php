@@ -2,9 +2,9 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-if( ! class_exists( 'Activator') ) {
+if( ! class_exists( 'AWS_Activator') ) {
 
-    class Activator{
+    class AWS_Activator{
 
         public static $_instance = null;
 
@@ -32,7 +32,7 @@ if( ! class_exists( 'Activator') ) {
 
         }
 
-        public static function activate() {
+        public static function activate_aws() {
 
             set_transient( 'welcome_redirect_aws', true, 60 );
 			
@@ -65,7 +65,7 @@ if( ! class_exists( 'Activator') ) {
 
 if( ! function_exists( 'load_aws_activator' )){
     function load_aws_activator(){
-        return Activator::_get_instance();
+        return AWS_Activator::_get_instance();
     }
 }
 $GLOBALS['load_aws_activator'] = load_aws_activator();
